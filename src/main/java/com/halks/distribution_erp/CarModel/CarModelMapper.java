@@ -5,6 +5,7 @@ import com.halks.distribution_erp.CarEngine.dto.CarEngineSummary;
 import com.halks.distribution_erp.CarModel.dto.CarModelBrandSummary;
 import com.halks.distribution_erp.CarModel.dto.CarModelRequest;
 import com.halks.distribution_erp.CarModel.dto.CarModelResponse;
+import com.halks.distribution_erp.CarModel.dto.CarModelSummary;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,21 +22,10 @@ public class CarModelMapper {
                 carBrand.getCountry()
         );
 
-        List<CarEngineSummary> engines = carModel.getEngines()
-                .stream().map(engine -> new CarEngineSummary(
-                        engine.getId(),
-                        engine.getName(),
-                        engine.getManufacturer(),
-                        engine.getFuelType(),
-                        engine.getProductionStartYear(),
-                        engine.getProductionEndYear()
-                )).toList();
-
         return new CarModelResponse(
                 carModel.getId(),
                 carModel.getName(),
-                carModelBrandSummary,
-                engines
+                carModelBrandSummary
         );
     }
 
@@ -47,5 +37,4 @@ public class CarModelMapper {
 
         return carModel;
     }
-
 }

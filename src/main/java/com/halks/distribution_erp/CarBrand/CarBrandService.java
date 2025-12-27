@@ -1,6 +1,8 @@
 package com.halks.distribution_erp.CarBrand;
 
 import com.halks.distribution_erp.CarBrand.dto.CarBrandResponse;
+import com.halks.distribution_erp.Exception.ErrorCode;
+import com.halks.distribution_erp.Exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,9 @@ public class CarBrandService {
 
     public CarBrandResponse findBrandById(Long id) {
         CarBrand brand = carBrandRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Brand not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorCode.CAR_BRAND_NOT_FOUND, String.format("Car brand with id %d cannot be found", id))
+                );
 
         return carBrandMapper.toResponse(brand);
     }
@@ -36,7 +40,9 @@ public class CarBrandService {
     public CarBrandResponse update(Long id, CarBrand carBrand) {
 
         CarBrand updatedCarBrand = carBrandRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Brand not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorCode.CAR_BRAND_NOT_FOUND, String.format("Car brand with id %d cannot be found", id))
+                );
 
         if(carBrand.getName() != null) {
             updatedCarBrand.setName(carBrand.getName());

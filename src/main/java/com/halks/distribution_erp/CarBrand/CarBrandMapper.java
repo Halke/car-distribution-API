@@ -1,5 +1,6 @@
 package com.halks.distribution_erp.CarBrand;
 
+import com.halks.distribution_erp.CarBrand.dto.CarBrandSummary;
 import com.halks.distribution_erp.CarModel.dto.CarModelSummary;
 import com.halks.distribution_erp.CarBrand.dto.CarBrandResponse;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,14 @@ public class CarBrandMapper {
                 carBrand.getName(),
                 carBrand.getCountry(),
                 carModelSummaries
+        );
+    }
+
+    public CarBrandSummary toSummary(CarBrand carBrand) {
+        return new CarBrandSummary(
+                carBrand.getId(),
+                carBrand.getName(),
+                carBrand.getCountry()
         );
     }
 

@@ -19,6 +19,5 @@ public record CarEngineResponse(
         TransmissionType transmissionType,
         String emissionStandard,
         Integer productionStartYear,
-        Integer productionEndYear,
-        List<CarEngineModelSummary> carModels
+        Integer productionEndYear
 ) { }

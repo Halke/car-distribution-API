@@ -2,10 +2,11 @@ package com.halks.distribution_erp.CarModel;
 
 import com.halks.distribution_erp.CarBrand.CarBrand;
 import com.halks.distribution_erp.CarBrand.CarBrandRepo;
-import com.halks.distribution_erp.CarEngine.CarEngine;
 import com.halks.distribution_erp.CarEngine.CarEngineRepo;
 import com.halks.distribution_erp.CarModel.dto.CarModelRequest;
 import com.halks.distribution_erp.CarModel.dto.CarModelResponse;
+import com.halks.distribution_erp.Exception.ErrorCode;
+import com.halks.distribution_erp.Exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,16 +16,13 @@ public class CarModelService {
 
     private final CarModelRepo carModelRepo;
     private final CarBrandRepo carBrandRepo;
-    private final CarEngineRepo carEngineRepo;
     private final CarModelMapper carModelMapper;
 
     public CarModelService(CarModelRepo carModelRepo,
                            CarBrandRepo carBrandRepo,
-                           CarModelMapper carModelMapper,
-                           CarEngineRepo carEngineRepo) {
+                           CarModelMapper carModelMapper) {
         this.carModelRepo = carModelRepo;
         this.carBrandRepo = carBrandRepo;
-        this.carEngineRepo = carEngineRepo;
         this.carModelMapper = carModelMapper;
     }
 
@@ -36,56 +34,45 @@ public class CarModelService {
 
     public CarModelResponse findById(Long id) {
         CarModel carModel = carModelRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("CarModel not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorCode.CAR_MODEL_NOT_FOUND, String.format("Car model with id %d cannot be found", id))
+                );
 
         return carModelMapper.toResponse(carModel);
     }
 
     public CarModelResponse create(CarModelRequest carModelRequest) {
         CarBrand brand = carBrandRepo.findById(carModelRequest.brandId())
-                .orElseThrow(() -> new RuntimeException("CarBrand not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorCode.CAR_BRAND_NOT_FOUND, String.format("Car brand with id %d cannot be found", carModelRequest.brandId()))
+                );
 
         CarModel newCarModel = carModelMapper.toEntity(carModelRequest, brand);
 
         return carModelMapper.toResponse(carModelRepo.save(newCarModel));
     }
 
-    public CarModelResponse update(Long id, CarModelRequest carModel) {
+    public CarModelResponse update(Long id, CarModelRequest carModelRequest) {
         CarModel updatedCarModel = carModelRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("CarModel not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorCode.CAR_MODEL_NOT_FOUND, String.format("Car model with id %d cannot be found", id))
+                );
 
-        if (carModel.name() != null) {
-            updatedCarModel.setName(carModel.name());
+        if (carModelRequest.name() != null) {
+            updatedCarModel.setName(carModelRequest.name());
         }
 
-        if (carModel.brandId() != null) {
-            CarBrand brand = carBrandRepo.findById(carModel.brandId())
-                    .orElseThrow(() -> new RuntimeException("CarBrand not found!"));
+        if (carModelRequest.brandId() != null) {
+            CarBrand brand = carBrandRepo.findById(carModelRequest.brandId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            ErrorCode.CAR_BRAND_NOT_FOUND,
+                            String.format("Car brand with id %d cannot be found", carModelRequest.brandId()))
+                    );
 
             updatedCarModel.setBrand(brand);
         }
 
         return carModelMapper.toResponse(carModelRepo.save(updatedCarModel));
-    }
-
-    public CarModelResponse addEngineToModel(Long modelId, Long engineId) {
-        CarModel modelById =  carModelRepo.findById(modelId)
-                .orElseThrow(() -> new RuntimeException("CarModel not found!"));
-        CarEngine engineById = carEngineRepo.findById(engineId)
-                .orElseThrow(() -> new RuntimeException("CarEngine not found!"));
-
-        modelById.getEngines().add(engineById);
-
-        return carModelMapper.toResponse(carModelRepo.save(modelById));
-    }
-
-    public void deleteEngineFromModel(Long modelId, Long engineId) {
-        CarModel modelById =  carModelRepo.findById(modelId)
-                .orElseThrow(() -> new RuntimeException("CarModel not found!"));
-        CarEngine engineById = carEngineRepo.findById(engineId)
-                .orElseThrow(() -> new RuntimeException("CarEngine not found!"));
-
-        modelById.getEngines().remove(engineById);
     }
 
     public void delete(Long id) {

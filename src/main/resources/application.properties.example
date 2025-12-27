@@ -1,0 +1,13 @@
+spring.application.name=Distribution ERP
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/distribution-erp
+spring.datasource.username=YOUR_DB_USERNAME
+spring.datasource.password=YOUR_DB_PASSWORD
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# Hibernate (JPA) settings
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+api.version.prefix=/api/v1

@@ -2,7 +2,8 @@ package com.halks.distribution_erp.CarEngine;
 
 import com.halks.distribution_erp.CarEngine.dto.CarEngineRequest;
 import com.halks.distribution_erp.CarEngine.dto.CarEngineResponse;
-import org.springframework.beans.BeanUtils;
+import com.halks.distribution_erp.Exception.ErrorCode;
+import com.halks.distribution_erp.Exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,33 +26,32 @@ public class CarEngineService {
 
     public CarEngineResponse findById(Long id) {
         CarEngine carEngineById = carEngineRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("CarEngine not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorCode.CAR_ENGINE_NOT_FOUND, String.format("Car engine with id %d cannot be found", id))
+                );
+
         return carEngineMapper.toResponse(carEngineById);
     }
 
     public CarEngineResponse create(CarEngineRequest carEngineRequest) {
-        CarEngine newCarEngine = new CarEngine();
-
-        newCarEngine.setName(carEngineRequest.name());
-        newCarEngine.setManufacturer(carEngineRequest.manufacturer());
-        newCarEngine.setFuelType(carEngineRequest.fuelType());
-        newCarEngine.setDisplacementCc(carEngineRequest.displacementCc());
-        newCarEngine.setCylinders(carEngineRequest.cylinders());
-        newCarEngine.setPowerHp(carEngineRequest.powerHp());
-        newCarEngine.setTorqueNm(carEngineRequest.torqueNm());
-        newCarEngine.setAspiration(carEngineRequest.aspiration());
-        newCarEngine.setTransmissionType(carEngineRequest.transmissionType());
-        newCarEngine.setEmissionStandard(carEngineRequest.emissionStandard());
-        newCarEngine.setProductionStartYear(carEngineRequest.productionStartYear());
-        newCarEngine.setProductionEndYear(carEngineRequest.productionEndYear());
-
+        CarEngine newCarEngine = carEngineMapper.requestToEntity(carEngineRequest);
         return carEngineMapper.toResponse(carEngineRepo.save(newCarEngine));
     }
 
     public CarEngineResponse update(Long id, CarEngineRequest carEngineRequest) {
-        CarEngine updatedCarEngine = carEngineRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("CarEngine not found!"));
+        CarEngine existingCarEngine = carEngineRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorCode.CAR_ENGINE_NOT_FOUND, String.format("Car engine with id %d cannot be found", id))
+                );
 
-        BeanUtils.co
+        CarEngine updatedCarEngine = carEngineMapper.requestToEntity(carEngineRequest);
+
+        updatedCarEngine.setId(existingCarEngine.getId());
+
+        return carEngineMapper.toResponse(carEngineRepo.save(updatedCarEngine));
+    }
+
+    public void delete(Long id) {
+        carEngineRepo.deleteById(id);
     }
 }

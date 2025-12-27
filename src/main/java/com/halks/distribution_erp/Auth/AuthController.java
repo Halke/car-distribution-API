@@ -13,9 +13,7 @@ public class AuthController {
     }
 
     @PostMapping("token")
-    public AuthResponse getToken(@RequestBody AuthRequest authRequest) {
-        return authService.verify(authRequest);
-    }
+    public AuthResponse getToken(@RequestBody AuthRequest authRequest) { return authService.verify(authRequest); }
 
     @PostMapping("register")
     public RegisterResponse register(@RequestBody User user) {

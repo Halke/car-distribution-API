@@ -1,6 +1,5 @@
 package com.halks.distribution_erp.CarModel;
 
-import com.halks.distribution_erp.CarBrand.CarBrand;
 import com.halks.distribution_erp.CarModel.dto.CarModelRequest;
 import com.halks.distribution_erp.CarModel.dto.CarModelResponse;
 import com.halks.distribution_erp.Interface.CrudController;
@@ -57,18 +56,6 @@ public class CarModelController implements CrudController<CarModelRequest, CarMo
     @Override
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         carModelService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{modelId}/engines/{engineId}")
-    public ResponseEntity<CarModelResponse> addEngineToCarModel(@PathVariable Long modelId, @PathVariable Long engineId) {
-        CarModelResponse updatedCarModel = carModelService.addEngineToModel(modelId, engineId);
-        return ResponseEntity.created(getCarModelLocation(updatedCarModel.id())).body(updatedCarModel);
-    }
-
-    @DeleteMapping("/{modelId}/engines/{engineId}")
-    public ResponseEntity<Void> deleteEngineFromCarModel(@PathVariable Long modelId, @PathVariable Long engineId) {
-        carModelService.deleteEngineFromModel(modelId, engineId);
         return ResponseEntity.noContent().build();
     }
 }

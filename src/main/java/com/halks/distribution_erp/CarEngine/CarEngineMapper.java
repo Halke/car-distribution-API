@@ -2,26 +2,19 @@ package com.halks.distribution_erp.CarEngine;
 
 import com.halks.distribution_erp.CarBrand.dto.CarBrandSummary;
 import com.halks.distribution_erp.CarEngine.dto.CarEngineModelSummary;
+import com.halks.distribution_erp.CarEngine.dto.CarEngineRequest;
 import com.halks.distribution_erp.CarEngine.dto.CarEngineResponse;
+import com.halks.distribution_erp.CarEngine.dto.CarEngineSummary;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@NoArgsConstructor
 public class CarEngineMapper {
 
     public CarEngineResponse toResponse(CarEngine carEngine){
-        List<CarEngineModelSummary> carModels = carEngine.getCarModels()
-                .stream().map(model -> new CarEngineModelSummary(
-                        model.getId(),
-                        model.getName(),
-                        new CarBrandSummary(
-                                model.getBrand().getId(),
-                                model.getBrand().getName(),
-                                model.getBrand().getCountry()
-                        )
-                )).toList();
-
         return new CarEngineResponse(
                 carEngine.getId(),
                 carEngine.getName(),
@@ -35,13 +28,37 @@ public class CarEngineMapper {
                 carEngine.getTransmissionType(),
                 carEngine.getEmissionStandard(),
                 carEngine.getProductionStartYear(),
-                carEngine.getProductionEndYear(),
-                carModels
+                carEngine.getProductionEndYear()
         );
     }
 
-//    public CarEngine toEntity(CarEngineResponse carEngineResponse){
-//        return null;
-//    }
+    public CarEngine requestToEntity(CarEngineRequest carEngineRequest){
+        CarEngine newCarEngine = new CarEngine();
 
+        newCarEngine.setName(carEngineRequest.name());
+        newCarEngine.setManufacturer(carEngineRequest.manufacturer());
+        newCarEngine.setFuelType(carEngineRequest.fuelType());
+        newCarEngine.setDisplacementCc(carEngineRequest.displacementCc());
+        newCarEngine.setCylinders(carEngineRequest.cylinders());
+        newCarEngine.setPowerHp(carEngineRequest.powerHp());
+        newCarEngine.setTorqueNm(carEngineRequest.torqueNm());
+        newCarEngine.setAspiration(carEngineRequest.aspiration());
+        newCarEngine.setTransmissionType(carEngineRequest.transmissionType());
+        newCarEngine.setEmissionStandard(carEngineRequest.emissionStandard());
+        newCarEngine.setProductionStartYear(carEngineRequest.productionStartYear());
+        newCarEngine.setProductionEndYear(carEngineRequest.productionEndYear());
+
+        return newCarEngine;
+    }
+
+    public CarEngineSummary toSummary(CarEngine carEngine) {
+        return new CarEngineSummary(
+                carEngine.getId(),
+                carEngine.getName(),
+                carEngine.getManufacturer(),
+                carEngine.getFuelType(),
+                carEngine.getProductionStartYear(),
+                carEngine.getProductionEndYear()
+        );
+    }
 }

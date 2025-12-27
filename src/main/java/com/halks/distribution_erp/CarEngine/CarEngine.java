@@ -3,14 +3,10 @@ package com.halks.distribution_erp.CarEngine;
 import com.halks.distribution_erp.CarEngine.enums.Aspiration;
 import com.halks.distribution_erp.CarEngine.enums.FuelType;
 import com.halks.distribution_erp.CarEngine.enums.TransmissionType;
-import com.halks.distribution_erp.CarModel.CarModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(name = "car_engines")
 @Data
@@ -60,7 +56,4 @@ public class CarEngine {
 
     @Column(name = "production_end_year")
     private Integer productionEndYear;
-
-    @ManyToMany(mappedBy = "engines")
-    private List<CarModel> carModels = new ArrayList<>();
 }
