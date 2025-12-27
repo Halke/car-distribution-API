@@ -1,14 +1,10 @@
 package com.halks.distribution_erp.CarModel;
 
 import com.halks.distribution_erp.CarBrand.CarBrand;
-import com.halks.distribution_erp.CarEngine.dto.CarEngineSummary;
 import com.halks.distribution_erp.CarModel.dto.CarModelBrandSummary;
 import com.halks.distribution_erp.CarModel.dto.CarModelRequest;
 import com.halks.distribution_erp.CarModel.dto.CarModelResponse;
-import com.halks.distribution_erp.CarModel.dto.CarModelSummary;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class CarModelMapper {

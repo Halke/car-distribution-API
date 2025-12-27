@@ -2,7 +2,6 @@ package com.halks.distribution_erp.CarModel;
 
 import com.halks.distribution_erp.CarBrand.CarBrand;
 import com.halks.distribution_erp.CarBrand.CarBrandRepo;
-import com.halks.distribution_erp.CarEngine.CarEngineRepo;
 import com.halks.distribution_erp.CarModel.dto.CarModelRequest;
 import com.halks.distribution_erp.CarModel.dto.CarModelResponse;
 import com.halks.distribution_erp.Exception.ErrorCode;

@@ -4,8 +4,6 @@ import com.halks.distribution_erp.CarEngine.enums.Aspiration;
 import com.halks.distribution_erp.CarEngine.enums.FuelType;
 import com.halks.distribution_erp.CarEngine.enums.TransmissionType;
 
-import java.util.List;
-
 public record CarEngineResponse(
         Long id,
         String name,
